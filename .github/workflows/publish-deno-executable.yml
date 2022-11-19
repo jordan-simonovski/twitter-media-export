@@ -1,0 +1,28 @@
+name: Publish Deno Executable
+run-name: ${{github.actor}} is publishing Deno Executable
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish-binary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.8.3
+      - run: deno compile --allow-read --allow-net --allow-write --output twitter-media-download main.ts
+      - uses: actions/upload-artifact@v2
+        with:
+          name: twitter-media-download
+          path: twitter-media-download
+      - uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./twitter-media-download
+          asset_name: twitter-media-download
+          asset_content_type: application/octet-stream
