@@ -22,6 +22,11 @@ jobs:
         with:
           name: twitter-media-download
           path: twitter-media-download
+      - name: Tag
+        # if: startsWith(github.ref, 'refs/heads/release/')
+        run: |
+          git tag "v$env:GitVersion_SemVer"
+          git push origin "v0.1"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
