@@ -9,20 +9,20 @@ jobs:
   publish-binary:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: denoland/setup-deno@v1
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Deno Env
+        uses: denoland/setup-deno@v1
         with:
           deno-version: v1.28.1
-      - run: deno compile --unstable --allow-read --allow-net --allow-write --output twitter-media-download main.ts
-      - uses: actions/upload-artifact@v2
+      - name: Compile
+        run: deno compile --unstable --allow-read --allow-net --allow-write --output twitter-media-download main.ts
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
         with:
           name: twitter-media-download
           path: twitter-media-download
-      - uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./twitter-media-download
-          asset_name: twitter-media-download
-          asset_content_type: application/octet-stream
+          files: twitter-media-download
