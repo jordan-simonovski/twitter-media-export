@@ -108,6 +108,12 @@ async function loadJSFile(path: string): Promise<void> {
     await eval(textForEval);
 }
 
-await loadJSFile(Deno.args[0]);
+const tweetFile = Deno.args[0];
+if (typeof tweetFile === 'undefined') {
+    console.log('No tweets.js file provided. Please provide a tweet.js file: ./twitter-media-export <tweets.js file location>');
+    Deno.exit(1);
+}
+
+await loadJSFile(tweetFile);
 const tweetMediaToDownload = readTweets();
 await downloadMedia(tweetMediaToDownload);
