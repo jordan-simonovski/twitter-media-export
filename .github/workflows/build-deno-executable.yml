@@ -1,12 +1,12 @@
-name: Publish Deno Executable
-run-name: ${{github.actor}} is publishing Deno Executable
+name: Build Deno Executable
+run-name: ${{github.actor}} is building Deno Executable
 on:
   push:
     branches:
       - main
 
 jobs:
-  publish-binary:
+  build-binary:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,9 +31,5 @@ jobs:
       - name: Tag
         # if: startsWith(github.ref, 'refs/heads/release/')
         run: |
-          git tag "v0.1"
-          git push origin "v0.1"
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: twitter-media-download
+          git tag "v0.2"
+          git push origin "v0.2"
