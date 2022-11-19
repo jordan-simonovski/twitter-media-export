@@ -16,20 +16,24 @@ jobs:
         with:
           deno-version: v1.28.1
       - name: Compile Linux Executable
-        run: deno compile --unstable --allow-read --allow-net --allow-write --target x86_64-unknown-linux-gnu --output twitter-media-download main.ts
+        run: deno compile --unstable --allow-read --allow-net --allow-write --target x86_64-unknown-linux-gnu --output bin/x86_linux/twitter-media-download main.ts
       - name: Compile Windows Executable
-        run: deno compile --unstable --allow-read --allow-net --allow-write --target x86_64-pc-windows-msvc --output twitter-media-download main.ts
+        run: deno compile --unstable --allow-read --allow-net --allow-write --target x86_64-pc-windows-msvc --output bin/x86_windows/twitter-media-download main.ts
       - name: Compile MacOS x86 Executable
-        run: deno compile --unstable --allow-read --allow-net --allow-write --target x86_64-apple-darwin --output twitter-media-download main.ts
+        run: deno compile --unstable --allow-read --allow-net --allow-write --target x86_64-apple-darwin --output bin/x86_darwin/twitter-media-download main.ts
       - name: Compile MacOS ARM Executable
-        run: deno compile --unstable --allow-read --allow-net --allow-write --target aarch64-apple-darwin --output twitter-media-download-macos-arm main.ts
+        run: deno compile --unstable --allow-read --allow-net --allow-write --target aarch64-apple-darwin --output bin/amd_darwin/twitter-media-download-macos-arm main.ts
       - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: twitter-media-download
-          path: twitter-media-download
-      - name: Tag
-        # if: startsWith(github.ref, 'refs/heads/release/')
-        run: |
-          git tag "v0.1.1"
-          git push origin "v0.1.1"
+          path: bin/**/*
+      - name: Pre-release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            bin/**/*
