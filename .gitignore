@@ -103,6 +103,8 @@ dist
 # TernJS port file
 .tern-port
 
+# apple stuff
+.DS_Stire
 
 tweets.js
 output
