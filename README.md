@@ -17,3 +17,16 @@ I haven't gotten around to packaging this just yet. So for now, you'll need to c
 ```bash
 deno run --allow-read --allow-net --allow-write main.ts <path-to-tweets.js>
 ```
+
+## Downloading
+
+**Note: Only pre-release downloads are available at the moment**
+
+Mac OS X
+```bash
+# ARM (Apple Silicon)
+curl -L https://github.com/jordan-simonovski/twitter-media-export/releases/download/latest/amd-darwin-twitter-media-download-macos-arm  > twitter-media-download | chmod +x twitter-media-download
+
+# Intel
+curl -L https://github.com/jordan-simonovski/twitter-media-export/releases/download/latest/x64-darwin-twitter-media-download-macos-arm > twitter-media-download | chmod +x twitter-media-download
+```
