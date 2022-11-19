@@ -21,5 +21,5 @@ Now you're ready to run the download.
 I haven't gotten around to packaging this just yet. So for now, you'll need to clone the repo and run it with Deno.
 
 ```bash
-deno run --allow-read --allow-net --allow-write main.ts tweets.js
+deno run --allow-read --allow-net --allow-write main.ts
 ```
