@@ -15,8 +15,14 @@ jobs:
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.28.1
-      - name: Compile
-        run: deno compile --unstable --allow-read --allow-net --allow-write --output twitter-media-download main.ts
+      - name: Compile Linux Executable
+        run: deno compile --unstable --allow-read --allow-net --allow-write --target x86_64-unknown-linux-gnu --output twitter-media-download main.ts
+      - name: Compile Windows Executable
+        run: deno compile --unstable --allow-read --allow-net --allow-write --target x86_64-pc-windows-msvc --output twitter-media-download main.ts
+      - name: Compile MacOS x86 Executable
+        run: deno compile --unstable --allow-read --allow-net --allow-write --target x86_64-apple-darwin --output twitter-media-download main.ts
+      - name: Compile MacOS ARM Executable
+        run: deno compile --unstable --allow-read --allow-net --allow-write --target aarch64-apple-darwin --output twitter-media-download-macos-arm main.ts
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
