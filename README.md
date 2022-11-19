@@ -10,16 +10,10 @@ Prior to executing the script, you'll need to download your twitter archive. You
 
 Once it's available, download the archive and extract it. You should have a folder called `data` with a bunch of JS files in it.
 
-Copy the `tweets.js` file and move it into the same directory as the `twitter-media-export/main.ts` script.
-
-Here comes some more of the hacky part:
-
-- Rename the variable `window.YTD.tweets.part0` to `export const exportedTweets` in the `tweets.js` file.
-
 Now you're ready to run the download.
 
 I haven't gotten around to packaging this just yet. So for now, you'll need to clone the repo and run it with Deno.
 
 ```bash
-deno run --allow-read --allow-net --allow-write main.ts
+deno run --allow-read --allow-net --allow-write main.ts <path-to-tweets.js>
 ```

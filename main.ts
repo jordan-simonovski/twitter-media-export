@@ -2,7 +2,7 @@ import { readerFromStreamReader } from "https://deno.land/std@0.93.0/io/mod.ts";
 import {existsSync} from "https://deno.land/std/fs/mod.ts";
 import * as mod from "https://deno.land/std@0.165.0/streams/conversion.ts";
 
-import { exportedTweets } from './tweets.js';
+let exportedTweets;
 
 export enum MediaType {
     PHOTO = 'photo',
@@ -67,8 +67,6 @@ export function readTweets(): string[] {
     return tweetTexts;
 }
 
-// download media from tweet array 
-
 async function downloadMedia(tweets: string[]): Promise<void> {
     const outputExists = existsSync('./output');
 
@@ -97,5 +95,15 @@ async function downloadMedia(tweets: string[]): Promise<void> {
     }
 }
 
+async function loadJSFile(path: string): string {
+    const file = await Deno.readFile(path);
+    const textFile =  new TextDecoder().decode(file);
+
+    const textForEval = textFile.replace('window.YTD.tweets.part0', 'exportedTweets');
+
+    await eval(textForEval);
+}
+
+await loadJSFile(Deno.args[0]);
 const tweetMediaToDownload = readTweets();
 await downloadMedia(tweetMediaToDownload);
