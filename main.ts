@@ -2,7 +2,7 @@ import { readerFromStreamReader } from "https://deno.land/std@0.93.0/io/mod.ts";
 import {existsSync} from "https://deno.land/std/fs/mod.ts";
 import * as mod from "https://deno.land/std@0.165.0/streams/conversion.ts";
 
-let exportedTweets;
+let exportedTweets: any;
 
 export enum MediaType {
     PHOTO = 'photo',
@@ -11,11 +11,11 @@ export enum MediaType {
 }
 
 
-function getMedia(tweetEntity): string {
+function getMedia(tweetEntity: any): string {
     if (typeof tweetEntity === 'undefined') {
         return "";
     } else {
-        return tweetEntity.media.map((media) => {
+        return tweetEntity.media.map((media: any) => {
             if (media.type === MediaType.PHOTO) {
                 return parseImage(media);
             } else if (media.type === MediaType.VIDEO || media.type === MediaType.GIF) {
@@ -25,14 +25,14 @@ function getMedia(tweetEntity): string {
     }
 }
 
-function parseImage(media): string {
+function parseImage(media: any): string {
     const imageURL = media.media_url_https;
     return `${imageURL}:large`;
 }
 
-function parseVideo(media): string {
+function parseVideo(media: any): string {
     const variants = media.video_info.variants;
-    const video = variants.reduce((prev, curr) => {
+    const video = variants.reduce((prev: any, curr: any) => {
         const prevBitrate = parseInt(prev.bitrate);
         const currBitrate = parseInt(curr.bitrate);
         
@@ -52,9 +52,9 @@ function parseVideo(media): string {
 export function readTweets(): string[] {
     const tweets = exportedTweets;
 
-    let tweetTexts: string[] = [];
+    const tweetTexts: string[] = [];
     
-    tweets.map((tweet) => {
+    tweets.map((tweet: any) => {
         const mediaURL: string = getMedia(tweet.tweet.extended_entities);
         
         if (mediaURL !== null || typeof mediaURL !== 'undefined') {
@@ -80,8 +80,12 @@ async function downloadMedia(tweets: string[]): Promise<void> {
         console.log(`Downloading ${tweet}`);
         const url = tweet;
         const fileName = url.split('/').pop();
-        const cleanFileName = fileName.replace(/[:?].*$/, '');
-
+        let cleanFileName: string;
+        if (typeof fileName !== 'undefined') {
+            cleanFileName = fileName.replace(/[:?].*$/, '');
+        } else {
+            cleanFileName = 'undefined';
+        }
         const res = await fetch(url);
         const file = await Deno.open(`./output/${cleanFileName}`, { create: true, write: true })
 
@@ -95,7 +99,7 @@ async function downloadMedia(tweets: string[]): Promise<void> {
     }
 }
 
-async function loadJSFile(path: string): string {
+async function loadJSFile(path: string): Promise<void> {
     const file = await Deno.readFile(path);
     const textFile =  new TextDecoder().decode(file);
 
